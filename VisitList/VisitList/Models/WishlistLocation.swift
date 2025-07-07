@@ -19,6 +19,7 @@ class WishlistLocation: Identifiable {
     var longitude: Double?
     var createdAt: Date
     var socialMediaContent: String?
+    var address: String?
     
     init(title: String, category: Category) {
         self.title = title
@@ -26,20 +27,20 @@ class WishlistLocation: Identifiable {
         self.createdAt = .now
     }
     
-    func setLocation(lattitude: Double, longitude: Double) {
-        self.lattitude = lattitude
-        self.longitude = longitude
+    func setLocation(location: Coordinate?) {
+        self.lattitude = location?.latitude
+        self.longitude = location?.longitude
     }
     
-    func setThingsToDo(_ things: String) {
+    func setThingsToDo(_ things: String?) {
         self.thingsToDo = things
     }
     
-    func setSocialMediaContent(_ content: String) {
+    func setSocialMediaContent(_ content: String?) {
         self.socialMediaContent = content
     }
-
-    func setCategory(_ category: Category) {
-        self.category = category
+    
+    func setAddress(_ address: String?) {
+        self.address = address
     }
 }

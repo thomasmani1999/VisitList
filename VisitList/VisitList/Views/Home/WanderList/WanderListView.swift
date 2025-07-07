@@ -13,6 +13,9 @@ struct WanderListView: View {
     @Environment(\.modelContext) private var context
     @StateObject var viewModel: WanderListVM = WanderListVM()
     @State private var selectedFilter: Category? = nil
+    @State private var showAddLocVC = false
+    @State private var selectedItem: WishlistLocation?
+    @State private var isPushing = false
     
     var body: some View {
         VStack {
@@ -23,11 +26,23 @@ struct WanderListView: View {
                     .fontWeight(.black)
                     .foregroundStyle(Color.app.primaryText)
             } else {
-                HStack {
+                VStack {
                     FilterView(viewModel: viewModel, selectedFilter: $selectedFilter)
+                    
+                    HorizontalDottedLine()
 
                     List(viewModel.wishlistedLocations) { location in
-                        WanderListCellView(wishlistedLocation: location)
+                        WanderListCellView(viewModel: viewModel, wishlistedLocation: location)
+                            .listRowInsets(.init())
+                            .listRowBackground(Color.clear)
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)     
+                    .listRowSeparator(.hidden)
+                    .navigationDestination(isPresented: $isPushing) {
+                        if let selectedItem {
+                            
+                        }
                     }
                 }
             }
@@ -41,7 +56,7 @@ struct WanderListView: View {
         })
         .overlay(alignment: .bottomTrailing) {
             Button(action: {
-                
+                showAddLocVC = true
             }, label: {
                 Image(systemName: "plus.circle.fill")
                     .resizable()
@@ -53,10 +68,14 @@ struct WanderListView: View {
             })
         }
         .ignoresSafeArea(edges: .bottom)
+        .sheet(isPresented: $showAddLocVC) {
+            AddWishlistLocationView(viewModel: viewModel)
+        }
     }
 }
 
 #Preview {
     WanderListView()
+        .environmentObject(LocationManager())
         .modelContainer(for: [Category.self, WishlistLocation.self], inMemory: true)
 }

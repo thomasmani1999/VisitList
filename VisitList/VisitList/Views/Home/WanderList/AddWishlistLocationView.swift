@@ -7,38 +7,41 @@
 
 import SwiftUI
 import SwiftData
+import MapKit
 
 struct AddWishlistLocationView: View {
     
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: WanderListVM
     
     @State var locationTitle: String = ""
     @State var thingsToDo: String = ""
     @State var selectedCategory: Category?
     @State var showAddSheet: Bool = false
+    @State var shortLink: String = ""
+    @State var coordinates: Coordinate?
+    @State var address: String = ""
+    @State var showLocPickerView = false
     
     private var selectedTitleText: String
     private var selectedToText: String
     private var selectedNameText: String
     private var selectedCategoryText: String
     private var selectedCategoryPromptOption: String
-    //    @Attribute(.unique) var id: UUID = UUID.init()
-    //    var title: String
-    //    @Relationship(deleteRule: .nullify) var category: Category
-    //    var thingsToDo: String?
-    //    var lattitude: Double?
-    //    var longitude: Double?
-    //    var createdAt: Date
-    //    var socialMediaContent: String?
+    private var selectedShortVideoLink: String
+    private var isMandatoryDataSet: Bool {
+        return !(locationTitle.isEmpty || selectedCategory == nil || coordinates == nil)
+    }
     
     init(viewModel: WanderListVM) {
         self.viewModel = viewModel
         
-        selectedTitleText = titleTexts.randomElement() ?? ""
-        selectedToText = todoTexts.randomElement() ?? ""
-        selectedNameText = nameTexts.randomElement() ?? ""
-        selectedCategoryText = categoryPromptTexts.randomElement() ?? ""
-        selectedCategoryPromptOption = categoryPromptOptions.randomElement() ?? ""
+        selectedTitleText = Strings.titleTexts.randomElement() ?? ""
+        selectedToText = Strings.todoTexts.randomElement() ?? ""
+        selectedNameText = Strings.nameTexts.randomElement() ?? ""
+        selectedCategoryText = Strings.categoryPromptTexts.randomElement() ?? ""
+        selectedCategoryPromptOption = Strings.categoryPromptOptions.randomElement() ?? ""
+        selectedShortVideoLink = "📎 Paste Link :"
     }
     
     var body: some View {
@@ -49,6 +52,7 @@ struct AddWishlistLocationView: View {
                 .foregroundStyle(Color.app.primaryText)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 5)
+                .padding(.top,10)
             
             HorizontalDottedLine()
                 .padding(.bottom,20)
@@ -63,6 +67,7 @@ struct AddWishlistLocationView: View {
                     .font(.system(size: 20, design: .rounded))
                     .fontWeight(.medium)
                     .foregroundStyle(Color.app.primaryText)
+                    .padding(.bottom, 20)
                 
                 Text(selectedToText)
                     .font(.system(size: 20, design: .rounded))
@@ -87,6 +92,7 @@ struct AddWishlistLocationView: View {
                         .foregroundStyle(Color.app.primaryText)
                 }
                 .frame(height: 150)
+                .padding(.bottom, 20)
                 
                 Text(selectedCategoryText)
                     .font(.system(size: 20, design: .rounded))
@@ -135,68 +141,83 @@ struct AddWishlistLocationView: View {
                     .background(Color.app.highlight, in: Capsule())
                     .foregroundStyle(Color.app.primaryText)
                 }
+                .padding(.bottom, 20)
                 .sheet(isPresented: $showAddSheet) {
                     //TODO: Add custom category creation
                 }
                 
+                HStack {
+                    Text(selectedShortVideoLink)
+                        .font(.system(size: 15, design: .rounded))
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.app.primaryText)
+                    
+                    TextField("TikTok / Reels / Shorts link…", text: $shortLink)
+                        .font(.system(size: 15, design: .rounded))
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.app.primaryText)
+                }
+                .padding(.bottom, 20)
+                
+                Button(action: {
+                    showLocPickerView = true
+                }) {
+                    HStack(content: {
+                        Text(address.isEmpty ? "Pin the location 📍" : "📍 " + address)
+                            .font(.system(size: 15, design: .rounded))
+                            .fontWeight(.medium)
+                            .foregroundColor(Color.app.primaryText)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "map.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 25, height: 25)
+                            .foregroundStyle(Color.app.accent)
+                        Image(systemName: "chevron.right")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 10, height: 10)
+                            .foregroundStyle(Color.app.accent)
+                    })
+                    .padding(18)
+                    .background(Color.app.highlight)
+                    .cornerRadius(10)
+                }
+                
+                Spacer()
+                
+                Button(action: {
+                    creatwWishlistLoc()
+                    dismiss()
+                }) {
+                    Text("Save")
+                        .font(.system(size: 15, design: .rounded))
+                        .fontWeight(.medium)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 18)
+                        .background(isMandatoryDataSet ? Color.app.accent : Color.app.secondaryText)
+                        .foregroundColor(Color.white)
+                        .cornerRadius(25)
+                        .disabled(isMandatoryDataSet)
+                }
                 
             })
             .padding(.horizontal, 20)
-            
-            Spacer()
+        }
+        .sheet(isPresented: $showLocPickerView) {
+            LocationPickerView(userSelectedCoords: $coordinates, address: $address )
         }
         .background {
             Color.app.primaryBackground.ignoresSafeArea()
         }
     }
     
-    // String contents
-    var titleTexts = [
-        "Where’s your next adventure?",
-        "Add a spot you’re dreaming about",
-        "Pin a place for future you",
-        "Plot a point on your personal map",
-        "Somewhere on your mind? \n Drop it here.",
-        "Wish you were there? \n Add it here.",
-        "Toss in a place you’re dying to go"]
-    
-    var nameTexts = [
-        "What’s this spot called?",
-        "Got a name for this place?",
-        "Name that café, shop, or secret lair!",
-        "What do we call this legendary location?",
-        "Place name, store name, hangout name — drop it here!",
-        "Give it a name before it becomes that place you forgot",
-    ]
-    
-    var todoTexts = [
-        "What’s on your to-do list here?",
-        "Got plans for this spot?",
-        "What are you hoping to do (or eat) here?",
-        "What’s the main mission at this place?",
-        "Do, see, try, buy — what’s the plan?"]
-    
-    var categoryPromptTexts = [
-        "How would you label this place?",
-        "Pick a vibe!",
-        "What kind of spot is this?",
-        "Tag this destination",
-        "What's the flavor of this place?",
-        "Choose your category of awesome",
-        "Classify this cool spot",
-        "What’s the genre here?",
-        "This place feels like a..."
-    ]
-    
-    var categoryPromptOptions = [
-        "Pick a vibe",
-        "Label this spot",
-        "Choose a type",
-        "What kind of place?",
-        "Tag it!",
-        "What's the vibe?",
-        "Place type?"
-    ]
+    private func creatwWishlistLoc() {
+        guard let selectedCategory, let coordinates else { return }
+        viewModel.addWishlistedLocation(title: locationTitle, category: selectedCategory, coordinates: coordinates, thingsToDo: thingsToDo, socialMediaContent: shortLink, address: address)
+    }
 }
 
 #Preview {
@@ -206,6 +227,8 @@ struct AddWishlistLocationView: View {
     let context = container.mainContext
     var vm = WanderListVM()
     vm.setContext(context)
+    var locationManager = LocationManager()
     return AddWishlistLocationView(viewModel: vm)
         .modelContainer(container)
+        .environmentObject(locationManager)
 }

@@ -39,16 +39,19 @@ struct HomeView: View {
                     Text("Location View")
                 }
                 .tag(0)
+                .toolbar(.hidden, for: .tabBar)
                 
                 NavigationStack() {
                     WanderListView()
                 }
                 .tag(1)
+                .toolbar(.hidden, for: .tabBar)
                 
                 NavigationStack() {
                     Text("WentList view")
                 }
                 .tag(2)
+                .toolbar(.hidden, for: .tabBar)
             }
             
             HStack {

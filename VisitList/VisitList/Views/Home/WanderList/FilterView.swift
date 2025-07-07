@@ -14,7 +14,9 @@ struct FilterView: View {
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 6, content: {
+            HStack(content: {
+                Spacer()
+                    .frame(width: 14)
                 ForEach( viewModel.getPresentCategories() ) { category in
                     Text("\(category.icon) \(category.name)")
                         .font(.system(size: 15, design: .rounded))
@@ -23,8 +25,13 @@ struct FilterView: View {
                         .background(selectedFilter == category ? Color.app.accent : Color.app.secondaryText.opacity(0.5))
                         .clipShape(Capsule())
                         .onTapGesture {
-                            selectedFilter = category
+                            if selectedFilter == category {
+                                selectedFilter = nil
+                            } else {
+                                selectedFilter = category
+                            }
                         }
+                        .padding(.horizontal, 6)
                     
                 }
             })

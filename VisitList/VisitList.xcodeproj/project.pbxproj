@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E902D8DF2E1974DA00218EED /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8DE2E1974CC00218EED /* LocationPickerView.swift */; };
+		E902D8E12E19756400218EED /* MapSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E02E19755600218EED /* MapSelectorView.swift */; };
+		E902D8E32E19AF8F00218EED /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E22E19AF8B00218EED /* Coordinates.swift */; };
+		E902D8E52E19B67200218EED /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E42E19B66E00218EED /* Strings.swift */; };
 		E97CC3312E0AEB14007B702E /* VisitListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3302E0AEB14007B702E /* VisitListApp.swift */; };
 		E97CC3332E0AEB14007B702E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3322E0AEB14007B702E /* OnboardingView.swift */; };
 		E97CC3352E0AEB14007B702E /* WishlistLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3342E0AEB14007B702E /* WishlistLocation.swift */; };
@@ -50,6 +54,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E902D8DE2E1974CC00218EED /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
+		E902D8E02E19755600218EED /* MapSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSelectorView.swift; sourceTree = "<group>"; };
+		E902D8E22E19AF8B00218EED /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
+		E902D8E42E19B66E00218EED /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E97CC32D2E0AEB14007B702E /* VisitList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97CC3302E0AEB14007B702E /* VisitListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitListApp.swift; sourceTree = "<group>"; };
 		E97CC3322E0AEB14007B702E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -77,6 +85,10 @@
 		E97CC3842E159918007B702E /* HorizontalDottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalDottedLine.swift; sourceTree = "<group>"; };
 		E97CC3862E1599E4007B702E /* VerticalDottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalDottedLine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		E902D8DA2E196FF200218EED /* Managers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Managers; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E97CC32A2E0AEB14007B702E /* Frameworks */ = {
@@ -126,6 +138,7 @@
 		E97CC32F2E0AEB14007B702E /* VisitList */ = {
 			isa = PBXGroup;
 			children = (
+				E902D8DA2E196FF200218EED /* Managers */,
 				E97CC35F2E0B0AFC007B702E /* Extensions */,
 				E97CC35C2E0B0A3B007B702E /* Resources */,
 				E97CC3302E0AEB14007B702E /* VisitListApp.swift */,
@@ -165,6 +178,7 @@
 		E97CC35C2E0B0A3B007B702E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E902D8E42E19B66E00218EED /* Strings.swift */,
 				E97CC3362E0AEB1A007B702E /* Assets.xcassets */,
 				E97CC35D2E0B0A67007B702E /* ColourUsage.swift */,
 			);
@@ -236,6 +250,7 @@
 		E97CC3752E102C2B007B702E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E902D8E22E19AF8B00218EED /* Coordinates.swift */,
 				E97CC3342E0AEB14007B702E /* WishlistLocation.swift */,
 				E97CC3762E1030E7007B702E /* Category.swift */,
 			);
@@ -245,6 +260,8 @@
 		E97CC3782E1033FE007B702E /* WanderList */ = {
 			isa = PBXGroup;
 			children = (
+				E902D8E02E19755600218EED /* MapSelectorView.swift */,
+				E902D8DE2E1974CC00218EED /* LocationPickerView.swift */,
 				E97CC3792E103519007B702E /* WanderListView.swift */,
 				E97CC37E2E11A84D007B702E /* FilterView.swift */,
 				E97CC3802E12C68D007B702E /* WanderListCellView.swift */,
@@ -277,6 +294,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				E902D8DA2E196FF200218EED /* Managers */,
 			);
 			name = VisitList;
 			productName = VisitList;
@@ -397,11 +417,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E97CC37F2E11A84E007B702E /* FilterView.swift in Sources */,
+				E902D8DF2E1974DA00218EED /* LocationPickerView.swift in Sources */,
 				E97CC3332E0AEB14007B702E /* OnboardingView.swift in Sources */,
 				E97CC36B2E0F348A007B702E /* HomeView.swift in Sources */,
 				E97CC3672E0F235D007B702E /* WelcomeView.swift in Sources */,
 				E97CC37A2E103519007B702E /* WanderListView.swift in Sources */,
 				E97CC3812E12C68D007B702E /* WanderListCellView.swift in Sources */,
+				E902D8E32E19AF8F00218EED /* Coordinates.swift in Sources */,
 				E97CC3742E10256D007B702E /* HomeViewModel.swift in Sources */,
 				E97CC3612E0B0B0E007B702E /* Colour+.swift in Sources */,
 				E97CC3722E101918007B702E /* OnboardingViewModel.swift in Sources */,
@@ -413,7 +435,9 @@
 				E97CC3832E159560007B702E /* AddWishlistLocationView.swift in Sources */,
 				E97CC3352E0AEB14007B702E /* WishlistLocation.swift in Sources */,
 				E97CC3312E0AEB14007B702E /* VisitListApp.swift in Sources */,
+				E902D8E12E19756400218EED /* MapSelectorView.swift in Sources */,
 				E97CC3772E1030E7007B702E /* Category.swift in Sources */,
+				E902D8E52E19B67200218EED /* Strings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +604,7 @@
 				DEVELOPMENT_TEAM = UQFSLKX8TP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show nearby places";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -609,6 +634,7 @@
 				DEVELOPMENT_TEAM = UQFSLKX8TP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to show nearby places";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

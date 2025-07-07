@@ -22,11 +22,6 @@ class WanderListVM: ObservableObject {
         context.insert(Category(name: "Bookstore", icon: "📚"))
         context.insert(Category(name: "Park", icon: "🌳"))
         context.insert(Category(name: "Shop", icon: "🛍️"))
-        do {
-            try context.save()
-        } catch {
-            print("Failed saving default categories")
-        }
     }
     
     func fetchCategories() {
@@ -63,8 +58,14 @@ class WanderListVM: ObservableObject {
         return newCategory
     }
     
-    func addWishlistedLocation(title: String, category: Category) -> WishlistLocation {
+    @discardableResult
+    func addWishlistedLocation(title: String, category: Category, coordinates: Coordinate, thingsToDo: String?, socialMediaContent: String?, address: String) -> WishlistLocation {
         let newWishlistedLocation = WishlistLocation(title: title, category: category)
+        newWishlistedLocation.setLocation(location: coordinates)
+        newWishlistedLocation.setThingsToDo(thingsToDo)
+        newWishlistedLocation.setSocialMediaContent(socialMediaContent)
+        newWishlistedLocation.setAddress(address)
+        
         context?.insert(newWishlistedLocation)
         fetchWishlistedLocations()
         return newWishlistedLocation

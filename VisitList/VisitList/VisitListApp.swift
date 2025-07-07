@@ -12,6 +12,16 @@ import SwiftData
 struct VisitListApp: App {
     
     @AppStorage("isLoggedin") var isLoggedIn: Bool = false
+    @StateObject private var locationManager = LocationManager()
+    
+    let container: ModelContainer = {
+        do {
+            let container = try ModelContainer(for: Category.self, WishlistLocation.self)
+            return container
+        } catch {
+            fatalError("❌ Failed to create container: \(error)")
+        }
+    }()
 
     var body: some Scene {
         WindowGroup {
@@ -21,6 +31,7 @@ struct VisitListApp: App {
                 OnboardingView()
             }
         }
-        .modelContainer(for: [Category.self, WishlistLocation.self], inMemory: true)
+        .modelContainer(container)
+        .environmentObject(locationManager)
     }
 }
