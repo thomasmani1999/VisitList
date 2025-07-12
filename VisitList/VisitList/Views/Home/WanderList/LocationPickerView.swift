@@ -14,6 +14,7 @@ struct LocationPickerView: View {
     
     @State private var isLoading: Bool = false
     @State private var searchText = ""
+    @State private var region: MKCoordinateRegion?
     @StateObject private var completer = SearchCompleter()
     
     @Binding var userSelectedCoords: Coordinate?
@@ -21,7 +22,7 @@ struct LocationPickerView: View {
     
     var body: some View {
         ZStack {
-            MapSelectorView(selectedCoordinate: $userSelectedCoords, initialCenter: locationManager.location ?? CLLocationCoordinate2D(latitude: 34.1381, longitude: -118.3534))
+            MapSelectorView(selectedCoordinate: $userSelectedCoords, region: $region, initialCenter: locationManager.location ?? CLLocationCoordinate2D(latitude: 34.1381, longitude: -118.3534))
                 .onChange(of: userSelectedCoords, { oldValue, newValue in
                     if let coord = newValue {
                         isLoading = true
@@ -34,25 +35,37 @@ struct LocationPickerView: View {
                 .ignoresSafeArea()
             
             VStack {
+                SearchBar(text: $searchText, placeholder: "Search for your location", onCancel: {
+                    completer.searchResults = []
+                })
+                .padding(.top)
+                .onChange(of: searchText) { oldValue, newValue in
+                    completer.searchAddressesForText(newValue, region: region)
+                }
                 
-                if !completer.completions.isEmpty {
-                    List(completer.completions, id: \.self) { completion in
-                        Button {
-                            lookup(completion)
-                        } label: {
-                            Text(completion.title)
-                                .font(.body)
-                            Text(completion.subtitle)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                if !completer.searchResults.isEmpty {
+                    List(completer.searchResults) { result in
+                        VStack(alignment: .leading) {
+                            Text(result.title)
+                                .font(.system(size: 18, design: .rounded))
+                            Text(result.subtitle)
+                                .font(.system(size: 12, design: .rounded))
+                        }
+                        .onTapGesture {
+                            if let request = result.searchRequest {
+                                isLoading = true
+                                completer.getLocations(request: request) { coord in
+                                    userSelectedCoords = coord
+                                }
+                                searchText = ""
+                                completer.searchResults = []
+                            }
                         }
                     }
-                    .background(.ultraThinMaterial)
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                    .padding(.top, 60)
-                    // limit height so you still see map behind
-                    .frame(maxHeight: 200)
+                    .contentMargins(.top, 0)
+                    .listSectionSpacing(2)
+                    .scrollContentBackground(.hidden)
+                    .shadow(radius: 5)
                 }
                 
                 Spacer()
@@ -88,18 +101,6 @@ struct LocationPickerView: View {
             }
         }
     }
-    
-    private func lookup(_ completion: MKLocalSearchCompletion) {
-        let req = MKLocalSearch.Request(completion: completion)
-        MKLocalSearch(request: req).start { resp, err in
-            guard
-                let item = resp?.mapItems.first,
-                let coord = item.placemark.location?.coordinate
-            else { return }
-            userSelectedCoords = Coordinate(latitude: coord.latitude, longitude: coord.longitude)
-            address = item.placemark.name ?? completion.title
-        }
-    }
 }
 
 #Preview {
@@ -109,5 +110,3 @@ struct LocationPickerView: View {
     LocationPickerView(userSelectedCoords: $coord, address: $addr)
         .environmentObject(locationManager)
 }
-
-

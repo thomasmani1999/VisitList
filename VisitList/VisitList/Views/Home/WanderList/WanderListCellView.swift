@@ -18,7 +18,6 @@ struct WanderListCellView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            
             HStack {
                 Text(wishlistedLocation.category.icon + " " +  wishlistedLocation.title)
                     .font(.system(size: 25, design: .rounded))
@@ -28,7 +27,6 @@ struct WanderListCellView: View {
                 Spacer()
                 
                 Button {
-                    print("Thomas 1")
                     showDeleteAlert = true
                 } label: {
                     Image(systemName: "trash.fill")
@@ -41,7 +39,6 @@ struct WanderListCellView: View {
                     }
                     Button("Cancel", role: .cancel) { }
                 }
-
             }
             
             HorizontalDottedLine()
@@ -58,7 +55,6 @@ struct WanderListCellView: View {
                     }
                     .padding(.bottom, 5)
                     
-                    
                     if let thingsTodo = wishlistedLocation.thingsToDo, !thingsTodo.isEmpty {
                         Text("Things to do :-")
                             .font(.system(size: 15, design: .rounded))
@@ -74,7 +70,6 @@ struct WanderListCellView: View {
                     
                     if let socialMediaContent = wishlistedLocation.socialMediaContent, let contentUrl = URL(string: socialMediaContent) {
                         HStack(content: {
-                            
                             Text("🔗")
                                 .font(.system(size: 15, design: .rounded))
                                 .foregroundStyle(Color.app.primaryText)

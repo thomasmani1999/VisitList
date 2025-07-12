@@ -12,6 +12,7 @@ import MapKit
 struct MapSelectorView: UIViewRepresentable {
     // Coordinate the parent owns (nil = no pin yet)
     @Binding var selectedCoordinate: Coordinate?
+    @Binding var region: MKCoordinateRegion?
     
     // NEW: where the map should start
     let initialCenter: CLLocationCoordinate2D
@@ -32,6 +33,9 @@ struct MapSelectorView: UIViewRepresentable {
         let map = MKMapView(frame: .zero)
         map.setRegion(startingRegion, animated: false)
         map.showsUserLocation = true
+        map.showsCompass = false
+        map.showsScale = true
+        map.showsUserTrackingButton = true
         map.delegate = context.coordinator
         
         map.preferredConfiguration = config
@@ -76,25 +80,50 @@ struct MapSelectorView: UIViewRepresentable {
                 mapView.setCenter(coord, animated: true)
             }
         }
+        
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            parent.region = mapView.region
+        }
     }
 }
 
-final class SearchCompleter: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
-    @Published var completions: [MKLocalSearchCompletion] = []
-    private let completer = MKLocalSearchCompleter()
-
-    override init() {
-        super.init()
+class SearchCompleter: NSObject, ObservableObject {
+    
+    @Published var searchResults: [SearchResult] = []
+    
+    private var completer = MKLocalSearchCompleter()
+    
+    func searchAddressesForText(_ text: String, region: MKCoordinateRegion?) {
         completer.delegate = self
-        completer.pointOfInterestFilter = .includingAll
+        if let region {
+            completer.region = region
+        }
+        completer.queryFragment = text
     }
-
-    var queryFragment: String {
-        get { completer.queryFragment }
-        set { completer.queryFragment = newValue }
+    
+    func getLocations(request: MKLocalSearch.Request, completion: @escaping (Coordinate) -> Void) {
+        let search = MKLocalSearch(request: request)
+        search.start
+        {
+            (response, error) in
+            guard let response = response else { return }
+        
+            let item = response.mapItems.first
+            
+            if let coordinate = item?.placemark.coordinate {
+                completion(Coordinate(latitude: coordinate.latitude, longitude: coordinate.longitude))
+            }
+        }
     }
+}
 
-    func completer(_ completer: MKLocalSearchCompleter, didUpdateResults results: [MKLocalSearchCompletion]) {
-        DispatchQueue.main.async { self.completions = results }
+extension SearchCompleter: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results.compactMap { result in
+            let street = result.title
+            let subtitle = result.subtitle
+            let searchRequest = MKLocalSearch.Request(completion: result)
+            return SearchResult(title: street, subtitle: subtitle, searchRequest: searchRequest)
+        }
     }
 }
