@@ -10,8 +10,9 @@ import SwiftData
 
 struct WanderListCellView: View {
     
+    @EnvironmentObject private var persistence: PersistanceManager
+    
     @State private var showDeleteAlert = false
-    @ObservedObject var viewModel: WanderListVM
     
     var wishlistedLocation: WishlistLocation
     
@@ -35,7 +36,9 @@ struct WanderListCellView: View {
                 .buttonStyle(.plain)
                 .alert("Are you sure you want to delete?", isPresented: $showDeleteAlert) {
                     Button("Delete", role: .destructive) {
-                        viewModel.deleteWishlistedLocation(wishlistedLocation)
+                        withAnimation {
+                            persistence.deleteWishlistedLocation(wishlistedLocation)
+                        }
                     }
                     Button("Cancel", role: .cancel) { }
                 }
@@ -110,21 +113,12 @@ struct WanderListCellView: View {
 }
 
 #Preview {
-    
-    let schema = Schema([Category.self, WishlistLocation.self])
-    let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: schema, configurations: [configuration])
-    let context = container.mainContext
-    
-    let vm = WanderListVM()
-    vm.setContext(context)
-    
-    var cat = vm.addCategory(name: "Cafe", icon: "☕️")
-    var location = vm.addWishlistedLocation(title: "Paulettans Pizzeria", category: cat, coordinates: Coordinate(latitude: 0, longitude: 0), thingsToDo: nil, socialMediaContent: nil, address: "")
+    var persistence = MockPersistanceManager() as PersistanceManager
+    var cat = persistence.addCategory(name: "Cafe", icon: "☕️")
+    var location = persistence.addWishlistedLocation(title: "Paulettans Pizzeria", category: cat, coordinates: Coordinate(latitude: 0, longitude: 0), thingsToDo: nil, socialMediaContent: nil, address: "")
     
     location.setLocation(location: Coordinate(latitude: 10.516687, longitude: 76.225437))
     location.setThingsToDo("Try out their amazing pizzas")
     location.setSocialMediaContent("https://www.google.com")
-    return WanderListCellView(viewModel: vm, wishlistedLocation: location)
-        .modelContainer(container)
+    return WanderListCellView(wishlistedLocation: location)
 }

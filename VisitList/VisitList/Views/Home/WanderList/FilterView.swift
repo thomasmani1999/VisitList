@@ -9,26 +9,28 @@ import SwiftUI
 
 struct FilterView: View {
     
+    @EnvironmentObject private var persistence: PersistanceManager
     @ObservedObject var viewModel: WanderListVM
-    @Binding var selectedFilter: Category?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(content: {
                 Spacer()
                     .frame(width: 14)
-                ForEach( viewModel.getPresentCategories() ) { category in
+                ForEach( persistence.getPresentCategories() ) { category in
                     Text("\(category.icon) \(category.name)")
                         .font(.system(size: 15, design: .rounded))
                         .padding(.vertical, 6)
                         .padding(.horizontal, 6)
-                        .background(selectedFilter == category ? Color.app.accent : Color.app.secondaryText.opacity(0.5))
+                        .background(viewModel.selectedFilter == category ? Color.app.accent : Color.app.secondaryText.opacity(0.5))
                         .clipShape(Capsule())
                         .onTapGesture {
-                            if selectedFilter == category {
-                                selectedFilter = nil
-                            } else {
-                                selectedFilter = category
+                            withAnimation {
+                                if viewModel.selectedFilter == category {
+                                    viewModel.setFilter(nil)
+                                } else {
+                                    viewModel.setFilter(category)
+                                }
                             }
                         }
                         .padding(.horizontal, 6)
@@ -41,5 +43,8 @@ struct FilterView: View {
 }
 
 #Preview {
-    FilterView(viewModel: WanderListVM(), selectedFilter: .constant(nil))
+    var persistance = MockPersistanceManager() as PersistanceManager
+    var viewModel: WanderListVM = WanderListVM(persistanceManager: persistance)
+    FilterView(viewModel: viewModel)
+        .environmentObject(persistance)
 }

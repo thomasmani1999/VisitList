@@ -7,83 +7,31 @@
 
 import Foundation
 import SwiftUI
-import SwiftData
+import Combine
 
 class WanderListVM: ObservableObject {
     
-    @Published var wishlistedLocations: [WishlistLocation] = []
-    @Published var categories: [Category] = []
-    private var context: ModelContext?
+    @Published var fileteredWishlistLocations: [WishlistLocation] = []
     
-    private func addDefaultCategories() {
-        guard let context else { return }
-        context.insert(Category(name: "Cafe", icon: "☕️"))
-        context.insert(Category(name: "Viewpoint", icon: "🏔️"))
-        context.insert(Category(name: "Bookstore", icon: "📚"))
-        context.insert(Category(name: "Park", icon: "🌳"))
-        context.insert(Category(name: "Shop", icon: "🛍️"))
+    private var wishlistedLocations: [WishlistLocation] = []
+    private var cancellables = Set<AnyCancellable>()
+    private var persistanceManager: PersistanceManager
+    public private(set) var selectedFilter: Category?
+    
+    init(persistanceManager: PersistanceManager) {
+        self.persistanceManager = persistanceManager
+        persistanceManager.$wishlistedLocations.sink { [weak self] locations in
+            self?.wishlistedLocations = locations
+            self?.setFilter(self?.selectedFilter)
+        }.store(in: &cancellables)
     }
     
-    func fetchCategories() {
-        do {
-            let descriptor = FetchDescriptor<Category>(
-                sortBy: [SortDescriptor(\.name)]
-            )
-            categories = try context?.fetch(descriptor) ?? []
-            
-            if categories.isEmpty {
-                addDefaultCategories()
-                fetchCategories()
-            }
-        } catch {
-            print("Failed to fetch categories: \(error)")
+    func setFilter(_ filter: Category?) {
+        selectedFilter = filter
+        if let filter {
+            fileteredWishlistLocations = wishlistedLocations.filter({ $0.category == filter })
+        } else {
+            fileteredWishlistLocations = wishlistedLocations
         }
-    }
-    
-    func fetchWishlistedLocations() {
-        do {
-            let descriptor = FetchDescriptor<WishlistLocation>(
-                sortBy: [SortDescriptor(\.createdAt)]
-            )
-            wishlistedLocations = try context?.fetch(descriptor) ?? []
-        } catch {
-            print("Failed to fetch locations: \(error)")
-        }
-    }
-
-    func addCategory(name: String, icon: String) -> Category {
-        let newCategory = Category(name: name, icon: icon)
-        context?.insert(newCategory)
-        fetchCategories() // refresh after insertion
-        return newCategory
-    }
-    
-    @discardableResult
-    func addWishlistedLocation(title: String, category: Category, coordinates: Coordinate, thingsToDo: String?, socialMediaContent: String?, address: String) -> WishlistLocation {
-        let newWishlistedLocation = WishlistLocation(title: title, category: category)
-        newWishlistedLocation.setLocation(location: coordinates)
-        newWishlistedLocation.setThingsToDo(thingsToDo)
-        newWishlistedLocation.setSocialMediaContent(socialMediaContent)
-        newWishlistedLocation.setAddress(address)
-        
-        context?.insert(newWishlistedLocation)
-        fetchWishlistedLocations()
-        return newWishlistedLocation
-    }
-    
-    func deleteWishlistedLocation(_ location: WishlistLocation) {
-        context?.delete(location)
-        fetchWishlistedLocations()
-    }
-    
-    func setContext(_ context: ModelContext) {
-        self.context = context
-        fetchCategories()
-        fetchWishlistedLocations()
-    }
-    
-    func getPresentCategories() -> [Category] {
-        let presentCategories = wishlistedLocations.compactMap{ $0.category }
-        return Array(Set(presentCategories))
     }
 }

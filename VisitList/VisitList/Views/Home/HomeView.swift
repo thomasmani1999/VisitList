@@ -9,6 +9,9 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @Environment(\.modelContext) private var context
+    @EnvironmentObject private var persistence: PersistanceManager
+    
     @StateObject private var viewModel: HomeVM = HomeVM()
     
     var body: some View {
@@ -42,7 +45,7 @@ struct HomeView: View {
                 .toolbar(.hidden, for: .tabBar)
                 
                 NavigationStack() {
-                    WanderListView()
+                    WanderListView(viewModel: WanderListVM(persistanceManager: persistence))
                 }
                 .tag(1)
                 .toolbar(.hidden, for: .tabBar)
@@ -77,6 +80,9 @@ struct HomeView: View {
             Color.app.primaryBackground
                 .ignoresSafeArea()
         }
+        .onAppear {
+            persistence.setContext(context)
+        }
     }
     
     func customTabItem(tabItem: TabbedItems, isActive: Bool) -> some View {
@@ -105,6 +111,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    
+    return HomeView()
+        .environmentObject(PersistanceManager())
         .modelContainer(for: [Category.self, WishlistLocation.self], inMemory: true)
 }

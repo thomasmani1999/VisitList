@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,10 +11,16 @@
 		E902D8E12E19756400218EED /* MapSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E02E19755600218EED /* MapSelectorView.swift */; };
 		E902D8E32E19AF8F00218EED /* Coordinates.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E22E19AF8B00218EED /* Coordinates.swift */; };
 		E902D8E52E19B67200218EED /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E902D8E42E19B66E00218EED /* Strings.swift */; };
+		E96D53DA2E1A9A0F00ADB029 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53D92E1A9A0F00ADB029 /* LocationManager.swift */; };
 		E96D53DC2E1C034400ADB029 /* CLLocationCoordinate2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53DB2E1C033900ADB029 /* CLLocationCoordinate2D.swift */; };
 		E96D53DE2E1EECAF00ADB029 /* MKCoordinateRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53DD2E1EECAE00ADB029 /* MKCoordinateRegion.swift */; };
 		E96D53E12E1EFE7F00ADB029 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53E02E1EFE7900ADB029 /* SearchBar.swift */; };
 		E96D53E32E20494600ADB029 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53E22E20493C00ADB029 /* SearchResult.swift */; };
+		E96D53E72E229C7C00ADB029 /* AddCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53E62E229C7C00ADB029 /* AddCategoryView.swift */; };
+		E96D53EA2E22A0A400ADB029 /* PersistanceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53E92E22A09D00ADB029 /* PersistanceManager.swift */; };
+		E96D53EC2E25392900ADB029 /* CustomRoundedRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96D53EB2E25392100ADB029 /* CustomRoundedRectangle.swift */; };
+		E9715A1A2E25933C008D0B4F /* MCEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = E9715A192E25933C008D0B4F /* MCEmojiPicker */; };
+		E9715A1C2E25933C008D0B4F /* MCEmojiPickerJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E9715A1B2E25933C008D0B4F /* MCEmojiPickerJSON */; };
 		E97CC3312E0AEB14007B702E /* VisitListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3302E0AEB14007B702E /* VisitListApp.swift */; };
 		E97CC3332E0AEB14007B702E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3322E0AEB14007B702E /* OnboardingView.swift */; };
 		E97CC3352E0AEB14007B702E /* WishlistLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E97CC3342E0AEB14007B702E /* WishlistLocation.swift */; };
@@ -62,10 +68,14 @@
 		E902D8E02E19755600218EED /* MapSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSelectorView.swift; sourceTree = "<group>"; };
 		E902D8E22E19AF8B00218EED /* Coordinates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinates.swift; sourceTree = "<group>"; };
 		E902D8E42E19B66E00218EED /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
+		E96D53D92E1A9A0F00ADB029 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		E96D53DB2E1C033900ADB029 /* CLLocationCoordinate2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationCoordinate2D.swift; sourceTree = "<group>"; };
 		E96D53DD2E1EECAE00ADB029 /* MKCoordinateRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKCoordinateRegion.swift; sourceTree = "<group>"; };
 		E96D53E02E1EFE7900ADB029 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		E96D53E22E20493C00ADB029 /* SearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
+		E96D53E62E229C7C00ADB029 /* AddCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryView.swift; sourceTree = "<group>"; };
+		E96D53E92E22A09D00ADB029 /* PersistanceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceManager.swift; sourceTree = "<group>"; };
+		E96D53EB2E25392100ADB029 /* CustomRoundedRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRoundedRectangle.swift; sourceTree = "<group>"; };
 		E97CC32D2E0AEB14007B702E /* VisitList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E97CC3302E0AEB14007B702E /* VisitListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitListApp.swift; sourceTree = "<group>"; };
 		E97CC3322E0AEB14007B702E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -94,15 +104,13 @@
 		E97CC3862E1599E4007B702E /* VerticalDottedLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalDottedLine.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		E902D8DA2E196FF200218EED /* Managers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Managers; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		E97CC32A2E0AEB14007B702E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9715A1A2E25933C008D0B4F /* MCEmojiPicker in Frameworks */,
+				E9715A1C2E25933C008D0B4F /* MCEmojiPickerJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,9 +134,21 @@
 		E96D53DF2E1EFE7300ADB029 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E96D53EB2E25392100ADB029 /* CustomRoundedRectangle.swift */,
 				E96D53E02E1EFE7900ADB029 /* SearchBar.swift */,
+				E97CC3862E1599E4007B702E /* VerticalDottedLine.swift */,
+				E97CC3842E159918007B702E /* HorizontalDottedLine.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		E96D53E82E22A08300ADB029 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				E96D53E92E22A09D00ADB029 /* PersistanceManager.swift */,
+				E96D53D92E1A9A0F00ADB029 /* LocationManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		E97CC3242E0AEB14007B702E = {
@@ -154,7 +174,7 @@
 		E97CC32F2E0AEB14007B702E /* VisitList */ = {
 			isa = PBXGroup;
 			children = (
-				E902D8DA2E196FF200218EED /* Managers */,
+				E96D53E82E22A08300ADB029 /* Managers */,
 				E97CC35F2E0B0AFC007B702E /* Extensions */,
 				E97CC35C2E0B0A3B007B702E /* Resources */,
 				E97CC3302E0AEB14007B702E /* VisitListApp.swift */,
@@ -286,8 +306,7 @@
 				E97CC37E2E11A84D007B702E /* FilterView.swift */,
 				E97CC3802E12C68D007B702E /* WanderListCellView.swift */,
 				E97CC3822E159560007B702E /* AddWishlistLocationView.swift */,
-				E97CC3842E159918007B702E /* HorizontalDottedLine.swift */,
-				E97CC3862E1599E4007B702E /* VerticalDottedLine.swift */,
+				E96D53E62E229C7C00ADB029 /* AddCategoryView.swift */,
 			);
 			path = WanderList;
 			sourceTree = "<group>";
@@ -314,9 +333,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				E902D8DA2E196FF200218EED /* Managers */,
 			);
 			name = VisitList;
 			productName = VisitList;
@@ -392,7 +408,7 @@
 			);
 			mainGroup = E97CC3242E0AEB14007B702E;
 			packageReferences = (
-				E97CC3642E0F1685007B702E /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				E9715A182E25933C008D0B4F /* XCRemoteSwiftPackageReference "MCEmojiPicker" */,
 			);
 			productRefGroup = E97CC32E2E0AEB14007B702E /* Products */;
 			projectDirPath = "";
@@ -440,15 +456,19 @@
 				E902D8DF2E1974DA00218EED /* LocationPickerView.swift in Sources */,
 				E97CC3332E0AEB14007B702E /* OnboardingView.swift in Sources */,
 				E97CC36B2E0F348A007B702E /* HomeView.swift in Sources */,
+				E96D53EA2E22A0A400ADB029 /* PersistanceManager.swift in Sources */,
 				E97CC3672E0F235D007B702E /* WelcomeView.swift in Sources */,
+				E96D53EC2E25392900ADB029 /* CustomRoundedRectangle.swift in Sources */,
 				E96D53DC2E1C034400ADB029 /* CLLocationCoordinate2D.swift in Sources */,
 				E96D53DE2E1EECAF00ADB029 /* MKCoordinateRegion.swift in Sources */,
 				E97CC37A2E103519007B702E /* WanderListView.swift in Sources */,
 				E97CC3812E12C68D007B702E /* WanderListCellView.swift in Sources */,
+				E96D53DA2E1A9A0F00ADB029 /* LocationManager.swift in Sources */,
 				E96D53E32E20494600ADB029 /* SearchResult.swift in Sources */,
 				E902D8E32E19AF8F00218EED /* Coordinates.swift in Sources */,
 				E97CC3742E10256D007B702E /* HomeViewModel.swift in Sources */,
 				E97CC3612E0B0B0E007B702E /* Colour+.swift in Sources */,
+				E96D53E72E229C7C00ADB029 /* AddCategoryView.swift in Sources */,
 				E96D53E12E1EFE7F00ADB029 /* SearchBar.swift in Sources */,
 				E97CC3722E101918007B702E /* OnboardingViewModel.swift in Sources */,
 				E97CC3872E1599E4007B702E /* VerticalDottedLine.swift in Sources */,
@@ -795,15 +815,28 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E97CC3642E0F1685007B702E /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+		E9715A182E25933C008D0B4F /* XCRemoteSwiftPackageReference "MCEmojiPicker" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			repositoryURL = "https://github.com/izyumkin/MCEmojiPicker.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.5.2;
+				minimumVersion = 1.2.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E9715A192E25933C008D0B4F /* MCEmojiPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9715A182E25933C008D0B4F /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;
+			productName = MCEmojiPicker;
+		};
+		E9715A1B2E25933C008D0B4F /* MCEmojiPickerJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9715A182E25933C008D0B4F /* XCRemoteSwiftPackageReference "MCEmojiPicker" */;
+			productName = MCEmojiPickerJSON;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E97CC3252E0AEB14007B702E /* Project object */;
 }

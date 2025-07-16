@@ -13,6 +13,7 @@ struct VisitListApp: App {
     
     @AppStorage("isLoggedin") var isLoggedIn: Bool = false
     @StateObject private var locationManager = LocationManager()
+    @StateObject private var persistanceManager: PersistanceManager = PersistanceManager()
     
     let container: ModelContainer = {
         do {
@@ -33,5 +34,6 @@ struct VisitListApp: App {
         }
         .modelContainer(container)
         .environmentObject(locationManager)
+        .environmentObject(persistanceManager)
     }
 }

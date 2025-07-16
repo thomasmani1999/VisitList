@@ -10,8 +10,8 @@ import SwiftData
 
 struct WanderListView: View {
     
-    @Environment(\.modelContext) private var context
-    @StateObject var viewModel: WanderListVM = WanderListVM()
+    @StateObject var viewModel: WanderListVM
+    
     @State private var selectedFilter: Category? = nil
     @State private var showAddLocVC = false
     @State private var selectedItem: WishlistLocation?
@@ -19,7 +19,7 @@ struct WanderListView: View {
     
     var body: some View {
         VStack {
-            if viewModel.wishlistedLocations.isEmpty {
+            if viewModel.fileteredWishlistLocations.isEmpty {
                 Text("It seem's your list is empty. Start adding and tracking places you wanna go and thing's you wanna do here")
                     .padding()
                     .font(.system(size: 45, design: .rounded))
@@ -27,18 +27,18 @@ struct WanderListView: View {
                     .foregroundStyle(Color.app.primaryText)
             } else {
                 VStack {
-                    FilterView(viewModel: viewModel, selectedFilter: $selectedFilter)
+                    FilterView(viewModel: viewModel)
                     
                     HorizontalDottedLine()
 
-                    List(viewModel.wishlistedLocations) { location in
-                        WanderListCellView(viewModel: viewModel, wishlistedLocation: location)
+                    List(viewModel.fileteredWishlistLocations) { location in
+                        WanderListCellView(wishlistedLocation: location)
                             .listRowInsets(.init())
                             .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
                     }
                     .listStyle(.plain)
-                    .scrollContentBackground(.hidden)     
-                    .listRowSeparator(.hidden)
+                    .scrollContentBackground(.hidden)
                     .navigationDestination(isPresented: $isPushing) {
                         if let selectedItem {
                             
@@ -51,9 +51,6 @@ struct WanderListView: View {
         .background {
             Color.app.primaryBackground.ignoresSafeArea()
         }
-        .onAppear(perform: {
-            viewModel.setContext(context)
-        })
         .overlay(alignment: .bottomTrailing) {
             Button(action: {
                 showAddLocVC = true
@@ -69,13 +66,15 @@ struct WanderListView: View {
         }
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $showAddLocVC) {
-            AddWishlistLocationView(viewModel: viewModel)
+            AddWishlistLocationView()
         }
     }
 }
 
 #Preview {
-    WanderListView()
+    var persistanceManager = MockPersistanceManager() as PersistanceManager
+    return WanderListView(viewModel: WanderListVM(persistanceManager: persistanceManager))
         .environmentObject(LocationManager())
+        .environmentObject(persistanceManager)
         .modelContainer(for: [Category.self, WishlistLocation.self], inMemory: true)
 }
