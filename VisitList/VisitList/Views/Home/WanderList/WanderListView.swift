@@ -32,7 +32,7 @@ struct WanderListView: View {
                     HorizontalDottedLine()
 
                     List(viewModel.fileteredWishlistLocations) { location in
-                        WanderListCellView(wishlistedLocation: location)
+                        WanderListCellView(viewModel: viewModel, wishlistedLocation: location)
                             .listRowInsets(.init())
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
@@ -66,7 +66,7 @@ struct WanderListView: View {
         }
         .ignoresSafeArea(edges: .bottom)
         .sheet(isPresented: $showAddLocVC) {
-            AddWishlistLocationView()
+            AddWishlistLocationView(viewModel: viewModel)
         }
     }
 }

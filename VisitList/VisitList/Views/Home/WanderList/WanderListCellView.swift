@@ -10,8 +10,7 @@ import SwiftData
 
 struct WanderListCellView: View {
     
-    @EnvironmentObject private var persistence: PersistanceManager
-    
+    @ObservedObject var viewModel: WanderListVM
     @State private var showDeleteAlert = false
     
     var wishlistedLocation: WishlistLocation
@@ -37,7 +36,7 @@ struct WanderListCellView: View {
                 .alert("Are you sure you want to delete?", isPresented: $showDeleteAlert) {
                     Button("Delete", role: .destructive) {
                         withAnimation {
-                            persistence.deleteWishlistedLocation(wishlistedLocation)
+                            viewModel.deleteWishlistLocation(wishlistedLocation)
                         }
                     }
                     Button("Cancel", role: .cancel) { }
@@ -114,11 +113,12 @@ struct WanderListCellView: View {
 
 #Preview {
     var persistence = MockPersistanceManager() as PersistanceManager
-    var cat = persistence.addCategory(name: "Cafe", icon: "☕️")
-    var location = persistence.addWishlistedLocation(title: "Paulettans Pizzeria", category: cat, coordinates: Coordinate(latitude: 0, longitude: 0), thingsToDo: nil, socialMediaContent: nil, address: "")
+    var vm = WanderListVM(persistanceManager: persistence)
+    var cat = vm.addCategory(name: "Cafe", icon: "☕️")
+    var location = vm.addWishlistedLocation(title: "Paulettans Pizzeria", category: cat, coordinates: Coordinate(latitude: 0, longitude: 0), thingsToDo: nil, socialMediaContent: nil, address: "")
     
     location.setLocation(location: Coordinate(latitude: 10.516687, longitude: 76.225437))
     location.setThingsToDo("Try out their amazing pizzas")
     location.setSocialMediaContent("https://www.google.com")
-    return WanderListCellView(wishlistedLocation: location)
+    return WanderListCellView(viewModel: vm, wishlistedLocation: location)
 }

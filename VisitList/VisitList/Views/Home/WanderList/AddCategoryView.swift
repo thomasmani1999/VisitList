@@ -10,8 +10,9 @@ import MCEmojiPicker
 
 struct AddCategoryView: View {
     
-    @EnvironmentObject private var persistence: PersistanceManager
     @Environment(\.dismiss) private var dismiss
+    
+    @ObservedObject var viewModel: WanderListVM
     @Binding var selectedCategory: Category?
     
     @State var categoryName: String = ""
@@ -98,11 +99,12 @@ struct AddCategoryView: View {
     }
     
     private func addNewCategory() {
-        selectedCategory = persistence.addCategory(name: categoryName, icon: categoryIcon)
+        selectedCategory = viewModel.addCategory(name: categoryName, icon: categoryIcon)
     }
 }
 
 #Preview {
-    AddCategoryView(selectedCategory: .constant(nil))
-        .environmentObject(MockPersistanceManager() as PersistanceManager)
+    var persistance = MockPersistanceManager() as PersistanceManager
+    var vm = WanderListVM(persistanceManager: persistance)
+    AddCategoryView(viewModel: vm, selectedCategory: .constant(nil))
 }

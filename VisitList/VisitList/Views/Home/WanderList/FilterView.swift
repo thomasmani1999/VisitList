@@ -9,7 +9,6 @@ import SwiftUI
 
 struct FilterView: View {
     
-    @EnvironmentObject private var persistence: PersistanceManager
     @ObservedObject var viewModel: WanderListVM
     
     var body: some View {
@@ -17,7 +16,7 @@ struct FilterView: View {
             HStack(content: {
                 Spacer()
                     .frame(width: 14)
-                ForEach( persistence.getPresentCategories() ) { category in
+                ForEach( viewModel.getPresentCategories() ) { category in
                     Text("\(category.icon) \(category.name)")
                         .font(.system(size: 15, design: .rounded))
                         .padding(.vertical, 6)
@@ -46,5 +45,4 @@ struct FilterView: View {
     var persistance = MockPersistanceManager() as PersistanceManager
     var viewModel: WanderListVM = WanderListVM(persistanceManager: persistance)
     FilterView(viewModel: viewModel)
-        .environmentObject(persistance)
 }

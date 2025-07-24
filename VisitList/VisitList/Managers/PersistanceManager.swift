@@ -49,34 +49,19 @@ class PersistanceManager: ObservableObject {
         }
     }
 
-    @discardableResult
-    func addCategory(name: String, icon: String) -> Category {
-        let newCategory = Category(name: name, icon: icon)
-        context?.insert(newCategory)
+    func addCategory(_ category: Category) {
+        context?.insert(category)
         fetchCategories() // refresh after insertion
-        return newCategory
     }
     
-    @discardableResult
-    func addWishlistedLocation(title: String, category: Category, coordinates: Coordinate, thingsToDo: String?, socialMediaContent: String?, address: String) -> WishlistLocation {
-        let newWishlistedLocation = WishlistLocation(title: title, category: category)
-        newWishlistedLocation.setLocation(location: coordinates)
-        newWishlistedLocation.setThingsToDo(thingsToDo)
-        newWishlistedLocation.setSocialMediaContent(socialMediaContent)
-        newWishlistedLocation.setAddress(address)
-        
-        context?.insert(newWishlistedLocation)
+    func addWishlistedLocation(_ location: WishlistLocation) {
+        context?.insert(location)
         fetchWishlistedLocations()
-        return newWishlistedLocation
     }
     
     func deleteWishlistedLocation(_ location: WishlistLocation) {
-        let category = location.category
         context?.delete(location)
         fetchWishlistedLocations()
-        if !getPresentCategories().contains(category) {
-            deleteCategory(category)
-        }
     }
     
     func deleteCategory(_ category: Category) {
@@ -89,11 +74,6 @@ class PersistanceManager: ObservableObject {
         fetchCategories()
         fetchWishlistedLocations()
     }
-    
-    func getPresentCategories() -> [Category] {
-        let presentCategories = wishlistedLocations.compactMap{ $0.category }
-        return Array(Set(presentCategories)).sorted { $0.name < $1.name }
-    }
 }
 
 class MockPersistanceManager: PersistanceManager {
@@ -102,23 +82,14 @@ class MockPersistanceManager: PersistanceManager {
         wishlistedLocations = [WishlistLocation(title: "Test", category: Category(name: "Test", icon: "😭"))]
     }
 
-    override func addCategory(name: String, icon: String) -> Category {
-        var cat = Category(name: "Test new", icon: "😳")
+    
+    override func addCategory(_ category: Category) {
+        let cat = category
         categories.append(cat)
-        return cat
-        
     }
     
-    @discardableResult
-    override func addWishlistedLocation(title: String, category: Category, coordinates: Coordinate, thingsToDo: String?, socialMediaContent: String?, address: String) -> WishlistLocation {
-        let newWishlistedLocation = WishlistLocation(title: title, category: category)
-        newWishlistedLocation.setLocation(location: coordinates)
-        newWishlistedLocation.setThingsToDo(thingsToDo)
-        newWishlistedLocation.setSocialMediaContent(socialMediaContent)
-        newWishlistedLocation.setAddress(address)
-        
-        wishlistedLocations.append(newWishlistedLocation)
-        return newWishlistedLocation
+    override func addWishlistedLocation(_ location: WishlistLocation) {
+        wishlistedLocations.append(location)
     }
     
     override func deleteWishlistedLocation(_ location: WishlistLocation) {

@@ -11,8 +11,8 @@ import MapKit
 
 struct AddWishlistLocationView: View {
     
-    @EnvironmentObject private var persistence: PersistanceManager
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: WanderListVM
     
     @State var locationTitle: String = ""
     @State var thingsToDo: String = ""
@@ -33,7 +33,9 @@ struct AddWishlistLocationView: View {
         return !(locationTitle.isEmpty || selectedCategory == nil || coordinates == nil)
     }
     
-    init() {
+    init(viewModel: WanderListVM) {
+        
+        self.viewModel = viewModel
         
         selectedTitleText = Strings.titleTexts.randomElement() ?? ""
         selectedToText = Strings.todoTexts.randomElement() ?? ""
@@ -101,7 +103,7 @@ struct AddWishlistLocationView: View {
                     
                     Menu {
                         // Existing categories
-                        ForEach(persistence.categories) { cat in
+                        ForEach(viewModel.categories) { cat in
                             Button {
                                 selectedCategory = cat
                             } label: {
@@ -143,7 +145,7 @@ struct AddWishlistLocationView: View {
                     }
                     .padding(.bottom, 20)
                     .sheet(isPresented: $showAddCategory) {
-                        AddCategoryView(selectedCategory: $selectedCategory)
+                        AddCategoryView(viewModel: viewModel, selectedCategory: $selectedCategory)
                             .presentationDetents([.height(180)])
                             .presentationDragIndicator(.hidden)
                             .presentationBackground(.clear)
@@ -228,15 +230,15 @@ struct AddWishlistLocationView: View {
     
     private func creatwWishlistLoc() {
         guard let selectedCategory, let coordinates else { return }
-        persistence.addWishlistedLocation(title: locationTitle, category: selectedCategory, coordinates: coordinates, thingsToDo: thingsToDo, socialMediaContent: shortLink, address: address)
+        viewModel.addWishlistedLocation(title: locationTitle, category: selectedCategory, coordinates: coordinates, thingsToDo: thingsToDo, socialMediaContent: shortLink, address: address)
     }
 }
 
 #Preview {
     var locationManager = LocationManager()
     var perstManager = MockPersistanceManager() as PersistanceManager
-    perstManager.addCategory(name: "Test", icon: "⛲️")
-    return AddWishlistLocationView()
+    var vm = WanderListVM(persistanceManager: perstManager)
+    vm.addCategory(name: "Test", icon: "⛲️")
+    return AddWishlistLocationView(viewModel: vm)
         .environmentObject(locationManager)
-        .environmentObject(perstManager)
 }
