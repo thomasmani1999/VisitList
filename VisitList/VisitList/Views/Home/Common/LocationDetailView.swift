@@ -12,13 +12,15 @@ import MapKit
 struct LocationDetailView: View {
     
     @Environment(\.dismiss) private var dismiss
-    
-    @State var rating: Double = 0
+    @State var rating: Double
     
     var location: Location
+    var screen: ScreenType
     
-    init(location: Location) {
+    init(location: Location, screenType: ScreenType) {
         self.location = location
+        self.screen = screenType
+        self.rating = location.rating ?? 0
     }
     
     var body: some View {
@@ -54,32 +56,32 @@ struct LocationDetailView: View {
             .padding(.bottom)
             
             VStack(alignment: .leading) {
-                    HStack {
-                        Text(location.category.name + " " + location.category.icon)
+                HStack {
+                    Text(location.category.name + " " + location.category.icon)
+                        .font(.system(size: 15, design: .rounded))
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.app.primaryText)
+                        .padding(5)
+                        .background(Color.app.highlight)
+                        .cornerRadius(10)
+                        .shadow(color: Color.app.primaryText.opacity(0.2), radius: 1, x: 0, y: 4)
+                    
+                    Spacer()
+                    
+                    if let address = location.address, !address.isEmpty {
+                        Text("📍 " + address)
                             .font(.system(size: 15, design: .rounded))
                             .fontWeight(.medium)
-                            .foregroundStyle(Color.app.primaryText)
+                            .foregroundColor(Color.app.primaryText)
                             .padding(5)
                             .background(Color.app.highlight)
                             .cornerRadius(10)
                             .shadow(color: Color.app.primaryText.opacity(0.2), radius: 1, x: 0, y: 4)
-                        
-                        Spacer()
-                        
-                        if let address = location.address, !address.isEmpty {
-                            Text("📍 " + address)
-                                .font(.system(size: 15, design: .rounded))
-                                .fontWeight(.medium)
-                                .foregroundColor(Color.app.primaryText)
-                                .padding(5)
-                                .background(Color.app.highlight)
-                                .cornerRadius(10)
-                                .shadow(color: Color.app.primaryText.opacity(0.2), radius: 1, x: 0, y: 4)
-                        }
                     }
-                    .padding(.bottom, -10)
+                }
+                .padding(.bottom, -10)
                 
-                Text("Things you wanted to do/try here")
+                Text(screen == .wentList ? "Things you did/tried here" : "Things you wanted to do/try here")
                     .font(.system(size: 15, design: .rounded))
                     .fontWeight(.medium)
                     .foregroundStyle(Color.app.primaryText)
@@ -171,11 +173,13 @@ struct LocationDetailView: View {
                     }
                 }
                 
-                Text("Already been?\nGive it a rating!")
-                    .font(.system(size: 17, design: .rounded))
-                    .foregroundColor(Color.app.primaryText)
-                    .fontWeight(.heavy)
-                    .padding(.vertical, 6)
+                if screen == .wanderList {
+                    Text("Already been?\nGive it a rating!")
+                        .font(.system(size: 17, design: .rounded))
+                        .foregroundColor(Color.app.primaryText)
+                        .fontWeight(.heavy)
+                        .padding(.vertical, 6)
+                }
                 
                 HStack {
                     Spacer()
@@ -189,6 +193,21 @@ struct LocationDetailView: View {
                         }
                     Spacer()
                 }
+                .padding(.vertical, 12)
+                
+                if screen == .wanderList {
+                    HStack {
+                        Spacer()
+                        Text("once you rate the location will be moved to the went locations tab")
+                            .font(.system(size: 14, design: .rounded))
+                            .foregroundColor(Color.app.primaryText)
+                            .fontWeight(.heavy)
+                            .padding(.vertical, 6)
+                            .multilineTextAlignment(.center)
+                        Spacer()
+                    }
+                }
+                
                 Spacer()
             }
             .padding(.horizontal)
@@ -242,5 +261,5 @@ struct LocationDetailView: View {
     location.setThingsToDo("Try out their amazing pizzas")
     location.setSocialMediaContent("https://www.google.com")
     location.setAddress("Thaikaktil house, Vellanikakra")
-    return LocationDetailView(location: location)
+    return LocationDetailView(location: location, screenType: .wentList)
 }

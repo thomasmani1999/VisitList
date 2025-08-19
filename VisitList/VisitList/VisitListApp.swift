@@ -17,7 +17,7 @@ struct VisitListApp: App {
     
     let container: ModelContainer = {
         do {
-            let container = try ModelContainer(for: Category.self, WishlistLocation.self)
+            let container = try ModelContainer(for: Category.self, Location.self)
             return container
         } catch {
             fatalError("❌ Failed to create container: \(error)")
@@ -27,7 +27,9 @@ struct VisitListApp: App {
     var body: some Scene {
         WindowGroup {
             if isLoggedIn {
-                HomeView()
+                NavigationStack {
+                    HomeView()
+                }
             } else {
                 OnboardingView()
             }

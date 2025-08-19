@@ -1,25 +1,22 @@
 //
-//  WanderListView.swift
+//  WentListView.swift
 //  VisitList
 //
-//  Created by Thomas Mani on 28/06/25.
+//  Created by Thomas Mani on 31/07/25.
 //
 
 import SwiftUI
-import SwiftData
 
-struct WanderListView: View {
-    
-    @StateObject var viewModel: WanderListVM
+struct WentListView: View {
+    @StateObject var viewModel: WentListVM
     
     @State private var selectedFilter: Category? = nil
-    @State private var showAddLocVC = false
     @State private var selectedItem: Location?
     
     var body: some View {
         VStack {
-            if viewModel.fileteredWishlistLocations.isEmpty {
-                Text("It seem's your list is empty. Start adding and tracking places you wanna go and thing's you wanna do here")
+            if viewModel.fileteredWentlistLocations.isEmpty {
+                Text("Looks like your list is empty. Start reviewing (or at least visiting) the places you've added to your wishlist.")
                     .padding()
                     .font(.system(size: 45, design: .rounded))
                     .fontWeight(.black)
@@ -30,8 +27,8 @@ struct WanderListView: View {
                     
                     HorizontalDottedLine()
 
-                    List(viewModel.fileteredWishlistLocations) { location in
-                        WanderListCellView(viewModel: viewModel, wishlistedLocation: location)
+                    List(viewModel.fileteredWentlistLocations) { location in
+                        WentListCellView(viewModel: viewModel, wentLocation: location)
                             .listRowInsets(.init())
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
@@ -42,7 +39,7 @@ struct WanderListView: View {
                     .listStyle(.plain)
                     .scrollContentBackground(.hidden)
                     .navigationDestination(item: $selectedItem, destination: { selectedItem in
-                        LocationDetailView(location: selectedItem, screenType: .wanderList)
+                        LocationDetailView(location: selectedItem, screenType: .wentList)
                             .toolbar(.hidden)
                     })
                 }
@@ -52,29 +49,13 @@ struct WanderListView: View {
         .background {
             Color.app.primaryBackground.ignoresSafeArea()
         }
-        .overlay(alignment: .bottomTrailing) {
-            Button(action: {
-                showAddLocVC = true
-            }, label: {
-                Image(systemName: "plus.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                    .padding(.horizontal ,20)
-                    .padding(.bottom ,10)
-                    .foregroundStyle(Color.app.accent.opacity(0.6))
-            })
-        }
         .ignoresSafeArea(edges: .bottom)
-        .sheet(isPresented: $showAddLocVC) {
-            AddWishlistLocationView(viewModel: viewModel)
-        }
     }
 }
 
 #Preview {
     var persistanceManager = MockPersistanceManager() as PersistanceManager
-    return WanderListView(viewModel: WanderListVM(persistanceManager: persistanceManager))
+    return WentListView(viewModel: WentListVM(persistanceManager: persistanceManager))
         .environmentObject(LocationManager())
         .environmentObject(persistanceManager)
         .modelContainer(for: [Category.self, Location.self], inMemory: true)

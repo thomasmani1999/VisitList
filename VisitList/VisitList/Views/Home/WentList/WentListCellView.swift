@@ -1,28 +1,36 @@
 //
-//  WanderListCellView.swift
+//  WentListCellView.swift
 //  VisitList
 //
-//  Created by Thomas Mani on 30/06/25.
+//  Created by Thomas Mani on 31/07/25.
 //
 
 import SwiftUI
 import SwiftData
 
-struct WanderListCellView: View {
+struct WentListCellView: View {
     
-    @ObservedObject var viewModel: WanderListVM
+    @ObservedObject var viewModel: WentListVM
     @State private var showDeleteAlert = false
     
-    var wishlistedLocation: Location
+    var wentLocation: Location
     
     var body: some View {
         
         VStack(alignment: .leading) {
             HStack {
-                Text(wishlistedLocation.category.icon + " " +  wishlistedLocation.title)
-                    .font(.system(size: 25, design: .rounded))
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.app.primaryText)
+                VStack (alignment: .leading, spacing: 3) {
+                    Text(wentLocation.category.icon + " " +  wentLocation.title)
+                        .font(.system(size: 25, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundStyle(Color.app.primaryText)
+                    
+                    StarRatingView(rating: .constant(wentLocation.rating ?? 0), isInteractive: false, starSize: 15)
+                        .disabled(true)
+                        .padding(5)
+                        .background(Color.app.primaryBackground)
+                        .clipShape(Capsule())
+                }
                 
                 Spacer()
                 
@@ -36,12 +44,13 @@ struct WanderListCellView: View {
                 .alert("Are you sure you want to delete?", isPresented: $showDeleteAlert) {
                     Button("Delete", role: .destructive) {
                         withAnimation {
-                            viewModel.deleteWishlistLocation(wishlistedLocation)
+                            viewModel.deleteWentlistLocation(wentLocation)
                         }
                     }
                     Button("Cancel", role: .cancel) { }
                 }
             }
+            .padding(.bottom,15)
             
             HorizontalDottedLine()
                 .offset(y: -10)
@@ -51,14 +60,14 @@ struct WanderListCellView: View {
                     HStack(alignment: .top) {
                         Text("📍")
                             .font(.system(size: 10, design: .rounded))
-                        Text(wishlistedLocation.address ?? "")
+                        Text(wentLocation.address ?? "")
                             .font(.system(size: 13, design: .rounded))
                             .offset(x: -5)
                     }
                     .padding(.bottom, 5)
                     
-                    if let thingsTodo = wishlistedLocation.thingsToDo, !thingsTodo.isEmpty {
-                        Text("Things to do :-")
+                    if let thingsTodo = wentLocation.thingsToDo, !thingsTodo.isEmpty {
+                        Text("Must try stuff:-")
                             .font(.system(size: 15, design: .rounded))
                             .fontWeight(.semibold)
                             .foregroundStyle(Color.app.primaryText)
@@ -97,6 +106,7 @@ struct WanderListCellView: View {
 
 #Preview {
     var persistence = MockPersistanceManager() as PersistanceManager
+    var originalVM = WentListVM(persistanceManager: persistence)
     var vm = WanderListVM(persistanceManager: persistence)
     var cat = vm.addCategory(name: "Cafe", icon: "☕️")
     var location = vm.addWishlistedLocation(title: "Paulettans Pizzeria", category: cat, coordinates: Coordinate(latitude: 0, longitude: 0), thingsToDo: nil, socialMediaContent: nil, address: "")
@@ -104,5 +114,6 @@ struct WanderListCellView: View {
     location.setLocation(location: Coordinate(latitude: 10.516687, longitude: 76.225437))
     location.setThingsToDo("Try out their amazing pizzas")
     location.setSocialMediaContent("https://www.google.com")
-    return WanderListCellView(viewModel: vm, wishlistedLocation: location)
+    location.setRating(4.2)
+    return WentListCellView(viewModel: originalVM, wentLocation: location)
 }

@@ -9,7 +9,7 @@ import SwiftData
 
 class PersistanceManager: ObservableObject {
     
-    @Published var wishlistedLocations: [WishlistLocation] = []
+    @Published var locations: [Location] = []
     @Published var categories: [Category] = []
     private var context: ModelContext?
     
@@ -40,10 +40,10 @@ class PersistanceManager: ObservableObject {
     
     func fetchWishlistedLocations() {
         do {
-            let descriptor = FetchDescriptor<WishlistLocation>(
+            let descriptor = FetchDescriptor<Location>(
                 sortBy: [SortDescriptor(\.createdAt)]
             )
-            wishlistedLocations = try context?.fetch(descriptor) ?? []
+            locations = try context?.fetch(descriptor) ?? []
         } catch {
             print("Failed to fetch locations: \(error)")
         }
@@ -54,12 +54,12 @@ class PersistanceManager: ObservableObject {
         fetchCategories() // refresh after insertion
     }
     
-    func addWishlistedLocation(_ location: WishlistLocation) {
+    func addWishlistedLocation(_ location: Location) {
         context?.insert(location)
         fetchWishlistedLocations()
     }
     
-    func deleteWishlistedLocation(_ location: WishlistLocation) {
+    func deleteLocation(_ location: Location) {
         context?.delete(location)
         fetchWishlistedLocations()
     }
@@ -79,7 +79,7 @@ class PersistanceManager: ObservableObject {
 class MockPersistanceManager: PersistanceManager {
     
     override func fetchWishlistedLocations() {
-        wishlistedLocations = [WishlistLocation(title: "Test", category: Category(name: "Test", icon: "😭"))]
+        locations = [Location(title: "Test", category: Category(name: "Test", icon: "😭"))]
     }
 
     
@@ -88,12 +88,12 @@ class MockPersistanceManager: PersistanceManager {
         categories.append(cat)
     }
     
-    override func addWishlistedLocation(_ location: WishlistLocation) {
-        wishlistedLocations.append(location)
+    override func addWishlistedLocation(_ location: Location) {
+        locations.append(location)
     }
     
-    override func deleteWishlistedLocation(_ location: WishlistLocation) {
-        wishlistedLocations.removeAll { loc in
+    override func deleteLocation(_ location: Location) {
+        locations.removeAll { loc in
             loc == location
         }
     }

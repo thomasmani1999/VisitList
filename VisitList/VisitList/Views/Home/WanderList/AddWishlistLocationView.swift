@@ -27,7 +27,6 @@ struct AddWishlistLocationView: View {
     private var selectedToText: String
     private var selectedNameText: String
     private var selectedCategoryText: String
-    private var selectedCategoryPromptOption: String
     private var selectedShortVideoLink: String
     private var isMandatoryDataSet: Bool {
         return !(locationTitle.isEmpty || selectedCategory == nil || coordinates == nil)
@@ -41,7 +40,6 @@ struct AddWishlistLocationView: View {
         selectedToText = Strings.todoTexts.randomElement() ?? ""
         selectedNameText = Strings.nameTexts.randomElement() ?? ""
         selectedCategoryText = Strings.categoryPromptTexts.randomElement() ?? ""
-        selectedCategoryPromptOption = Strings.categoryPromptOptions.randomElement() ?? ""
         selectedShortVideoLink = "📎 Paste Link :"
     }
     
@@ -101,56 +99,7 @@ struct AddWishlistLocationView: View {
                         .fontWeight(.medium)
                         .foregroundStyle(Color.app.primaryText)
                     
-                    Menu {
-                        // Existing categories
-                        ForEach(viewModel.categories) { cat in
-                            Button {
-                                selectedCategory = cat
-                            } label: {
-                                Text(cat.name + " " + cat.icon)
-                                    .font(.system(size: 20, design: .rounded))
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(Color.app.primaryText)
-                            }
-                        }
-                        
-                        Divider()
-                        
-                        Button {
-                            showAddCategory = true
-                        } label: {
-                            Label("Add Category", systemImage: "plus")
-                        }
-                    } label: {
-                        // Menu label in the main UI
-                        HStack {
-                            if let sel = selectedCategory {
-                                Text(sel.name + " " + sel.icon)
-                                    .font(.system(size: 15, design: .rounded))
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(Color.app.primaryText)
-                            } else {
-                                Text(selectedCategoryPromptOption)
-                                    .font(.system(size: 15, design: .rounded))
-                                    .fontWeight(.medium)
-                                    .foregroundStyle(Color.app.primaryText)
-                            }
-                            Image(systemName: "chevron.down")
-                                .font(.caption)
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(Color.app.highlight, in: Capsule())
-                        .foregroundStyle(Color.app.primaryText)
-                    }
-                    .padding(.bottom, 20)
-                    .sheet(isPresented: $showAddCategory) {
-                        AddCategoryView(viewModel: viewModel, selectedCategory: $selectedCategory)
-                            .presentationDetents([.height(180)])
-                            .presentationDragIndicator(.hidden)
-                            .presentationBackground(.clear)
-                            .ignoresSafeArea(edges: .bottom)
-                    }
+                    CategoryMenuPill(viewModel: viewModel, selectedCat: $selectedCategory, showAddCategory: $showAddCategory)
                     
                     HStack {
                         Text(selectedShortVideoLink)

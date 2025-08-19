@@ -38,23 +38,17 @@ struct HomeView: View {
             .padding(.horizontal)
             
             TabView(selection: $viewModel.selectedTab) {
-                NavigationStack() {
-                    Text("Location View")
-                }
-                .tag(0)
-                .toolbar(.hidden, for: .tabBar)
+                LocationView(viewModel: LocationViewVM(persistanceManager: persistence))
+                    .tag(0)
+                    .toolbar(.hidden, for: .tabBar)
                 
-                NavigationStack() {
-                    WanderListView(viewModel: WanderListVM(persistanceManager: persistence))
-                }
-                .tag(1)
-                .toolbar(.hidden, for: .tabBar)
+                WanderListView(viewModel: WanderListVM(persistanceManager: persistence))
+                    .tag(1)
+                    .toolbar(.hidden, for: .tabBar)
                 
-                NavigationStack() {
-                    Text("WentList view")
-                }
-                .tag(2)
-                .toolbar(.hidden, for: .tabBar)
+                WentListView(viewModel: WentListVM(persistanceManager: persistence))
+                    .tag(2)
+                    .toolbar(.hidden, for: .tabBar)
             }
             
             HStack {
@@ -66,7 +60,7 @@ struct HomeView: View {
                     } label: {
                         customTabItem(tabItem: item, isActive: viewModel.selectedTab == item.rawValue)
                     }
-
+                    
                 }
             }
             .padding(6)
@@ -114,5 +108,5 @@ struct HomeView: View {
     
     return HomeView()
         .environmentObject(PersistanceManager())
-        .modelContainer(for: [Category.self, WishlistLocation.self], inMemory: true)
+        .modelContainer(for: [Category.self, Location.self], inMemory: true)
 }
